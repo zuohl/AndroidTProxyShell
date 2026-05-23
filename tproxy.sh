@@ -917,7 +917,7 @@ setup_proxy_chain() {
         safe_chain_create "$family" "$table" "$c"
     done
 
-# 1. 优先建立连接追踪放行，如果是 WAN 回包，直接在这里 ACCEPT 出去，保留 Android netd 原有标记，通过 wlan0 的 Strict RPF 校验
+    # 1. 优先建立连接追踪放行，如果是 WAN 回包，直接在这里 ACCEPT 出去，保留 Android netd 原有标记，通过 wlan0 的 Strict RPF 校验
     if [ "$HAS_CONNTRACK" -eq 1 ]; then
         $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m conntrack --ctdir REPLY -j ACCEPT
         $cmd -t "$table" -A "PROXY_OUTPUT$suffix" -m conntrack --ctdir REPLY -j ACCEPT
@@ -1190,7 +1190,7 @@ setup_proxy_chain() {
         fi
     fi
 
-if [ "$_perf_ct" -eq 1 ]; then
+    if [ "$_perf_ct" -eq 1 ]; then
         if [ "$mode" = "tproxy" ]; then
             $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m conntrack --ctstate NEW,RELATED -j CONNMARK --set-mark "$mark"
             # 【修复】：PREROUTING 阶段加上 /$mark 掩码识别被 MIUI 染色的连接
