@@ -1194,7 +1194,7 @@ setup_proxy_chain() {
         if [ "$mode" = "tproxy" ]; then
             $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m conntrack --ctstate NEW,RELATED -j CONNMARK --set-mark "$mark"
             # 【修复】：PREROUTING 阶段加上 /$mark 掩码识别被 MIUI 染色的连接
-$cmd -t "$table" -A "PROXY_PREROUTING$suffix" -p tcp -m connmark --mark "$mark/0xff" -j TPROXY --on-port "$PROXY_TCP_PORT" --tproxy-mark "$mark"
+            $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -p tcp -m connmark --mark "$mark/0xff" -j TPROXY --on-port "$PROXY_TCP_PORT" --tproxy-mark "$mark"
             $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -p udp -m connmark --mark "$mark/0xff" -j TPROXY --on-port "$PROXY_UDP_PORT" --tproxy-mark "$mark"
 
             $cmd -t "$table" -A "PROXY_OUTPUT$suffix" -m conntrack --ctstate NEW,RELATED -j CONNMARK --set-mark "$mark"
@@ -1204,7 +1204,7 @@ $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -p tcp -m connmark --mark "$mark/0
         else
             $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m conntrack --ctstate NEW,RELATED -j CONNMARK --set-mark "$mark"
             # 【修复】：REDIRECT 模式同理加掩码
-$cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m connmark --mark "$mark/0xff" -j REDIRECT --to-ports "$PROXY_TCP_PORT"
+            $cmd -t "$table" -A "PROXY_PREROUTING$suffix" -m connmark --mark "$mark/0xff" -j REDIRECT --to-ports "$PROXY_TCP_PORT"
 
             $cmd -t "$table" -A "PROXY_OUTPUT$suffix" -m conntrack --ctstate NEW,RELATED -j CONNMARK --set-mark "$mark"
             $cmd -t "$table" -A "PROXY_OUTPUT$suffix" -m connmark --mark "$mark/0xff" -j REDIRECT --to-ports "$PROXY_TCP_PORT"
